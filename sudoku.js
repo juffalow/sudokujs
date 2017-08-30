@@ -193,8 +193,4 @@ export default class Sudoku {
         backtrack(0);
         return sudoku;
     }
-
-    toString() {
-        return sudokuToString();
-    }
 }
