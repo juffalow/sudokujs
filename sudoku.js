@@ -7,16 +7,16 @@
  */
 function checkBoard(board) {
     if( board.constructor !== Array ) {
-        throw "Board is not an array!";
+        throw 'Board is not an array!';
     }
 
     if( board.length !== 9 ) {
-        throw "Array must be 9x9!";
+        throw 'Array must be 9x9!';
     }
 
-    for( var i = 0; i < board.length; i++ ) {
+    for( let i = 0; i < board.length; i++ ) {
         if( board[i].length !== 9 ) {
-            throw "Array must be 9x9!";
+            throw 'Array must be 9x9!';
         }
     }
 }
@@ -65,7 +65,7 @@ export default class Sudoku {
          * @param  {number} row
          * @param  {number} col
          */
-        var _onCellChange = function(row, col) {};
+        this._onCellChange = function(row, col) {};
         /**
          *
          *
@@ -73,13 +73,13 @@ export default class Sudoku {
          * @param  {number} col
          * @param  {number} value
          */
-        var _onValueChange = function(row, col, value) {};
+        this._onValueChange = function(row, col, value) {};
         /**
          *
          *
          * @param  {array} result
          */
-        var _onFinish = function(result) {};
+         this._onFinish = function(result) {};
 
         checkBoard(board);
         this._prepare();
@@ -100,22 +100,22 @@ export default class Sudoku {
      * @param  {number} delay
      */
     solveWithDelay(onCellChangeListener, onValueChangeListener, onFinishListener, delay) {
-        if( typeof onCellChangeListener === "function" ) {
+        if( typeof onCellChangeListener === 'function' ) {
             this._onCellChange = onCellChangeListener;
         } else {
-            throw "Argument onCellChangeListener must be function!";
+            throw 'Argument onCellChangeListener must be function!';
         }
 
-        if( typeof onValueChangeListener === "function" ) {
+        if( typeof onValueChangeListener === 'function' ) {
             this._onValueChange = onValueChangeListener;
         } else {
-            throw "Argument onValueChangeListener must be function!";
+            throw 'Argument onValueChangeListener must be function!';
         }
 
-        if( typeof onFinishListener === "function" ) {
+        if( typeof onFinishListener === 'function' ) {
             this._onFinish = onFinishListener;
         } else {
-            throw "Argument onFinishListener must be function!";
+            throw 'Argument onFinishListener must be function!';
         }
 
         this._sleep = delay || 0;
@@ -128,7 +128,7 @@ export default class Sudoku {
      *
      */
     _prepare() {
-        for( var i = 0; i < 9; i++ ) {
+        for( let i = 0; i < 9; i++ ) {
             this._rowRule[i] = [ false, false, false, false, false, false, false, false, false ];
             this._colRule[i] = [ false, false, false, false, false, false, false, false, false ];
             this._squareRule[i] = [ false, false, false, false, false, false, false, false, false ];
@@ -137,15 +137,15 @@ export default class Sudoku {
     }
 
     _analyze(input) {
-        for( var i = 0; i < 9; i++ ) {
-            for( var j = 0; j < 9; j++ ) {
+        for( let i = 0; i < 9; i++ ) {
+            for( let j = 0; j < 9; j++ ) {
                 if( !this._set(i, j, input[i][j]) ) {
-                    throw "Sudoku is not valid!";
+                    throw 'Sudoku is not valid!';
                 }
                 if( input[i][j] === null ) {
                     this._emptyCells.push({
                         row: i,
-                        col: j
+                        col: j,
                     });
                 }
             }
@@ -157,7 +157,7 @@ export default class Sudoku {
             return true;
         }
 
-        for( var i = 1; i <= 9; i++ ) {
+        for( let i = 1; i <= 9; i++ ) {
             if( this._set(this._emptyCells[index].row, this._emptyCells[index].col, i) ) {
                 if( this._backtrack(index + 1) ) {
                     return true;
@@ -176,7 +176,7 @@ export default class Sudoku {
 
         setTimeout(function() {
             this._onCellChange(this._emptyCells[step].row, this._emptyCells[step].col);
-            for( var i = 0 + this._sudoku[this._emptyCells[step].row][this._emptyCells[step].col] + 1; i <= 9; i++ ) {
+            for( let i = 0 + this._sudoku[this._emptyCells[step].row][this._emptyCells[step].col] + 1; i <= 9; i++ ) {
                 if( this._set(this._emptyCells[step].row, this._emptyCells[step].col, i) ) {
                     this._onValueChange(this._emptyCells[step].row, this._emptyCells[step].col, i);
                     this._nonRecursiveBacktrack(step + 1);
