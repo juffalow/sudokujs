@@ -8,7 +8,7 @@
     "linebreak-style": "error",
     "camelcase": "warn",
     "no-shadow": "warn",
-    "comma-dangle": "warn",
+    "comma-dangle": ["warn", "always-multiline"],
     "eqeqeq": "error",
     "no-var": "error",
     "no-extra-parens": "warn",
