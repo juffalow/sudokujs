@@ -1,17 +1,19 @@
 {
-    "devDependencies": {
-        "babel": "^6.23.0",
-        "babel-core": "^6.26.0",
-        "babel-preset-es2015": "^6.24.1",
-        "babel-register": "^6.26.0",
-        "babelify": "^7.3.0",
-        "browserify": "^14.4.0",
-        "chai": "^4.1.1",
-        "mocha": "^3.5.0",
-        "uglify-js": "^3.0.28"
-    },
-    "scripts": {
-        "build": "./node_modules/.bin/browserify index.js -t [ babelify --presets [ es2015 ] ] -s Sudoku | ./node_modules/.bin/uglifyjs -c > sudoku.min.js",
-        "test": "./node_modules/mocha/bin/mocha --compilers js:babel-core/register"
-    }
+  "devDependencies": {
+    "babel": "^6.23.0",
+    "babel-core": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-register": "^6.26.0",
+    "babelify": "^7.3.0",
+    "browserify": "^14.4.0",
+    "chai": "^4.1.1",
+    "eslint": "^4.8.0",
+    "mocha": "^3.5.0",
+    "uglify-js": "^3.0.28"
+  },
+  "scripts": {
+    "build": "./node_modules/.bin/browserify index.js -t [ babelify --presets [ es2015 ] ] -s Sudoku | ./node_modules/.bin/uglifyjs -c > sudoku.min.js",
+    "test": "./node_modules/mocha/bin/mocha --compilers js:babel-core/register",
+    "lint": "./node_modules/eslint/bin/eslint.js -c ./.eslintrc.json ./"
+  }
 }
