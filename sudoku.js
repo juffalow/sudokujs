@@ -1,22 +1,22 @@
 /**
- * Checks whether array is valid sudoku array, i.e. 9x9.
+ * Checks whether array is valid sudoku array, i.e. NxN.
  *
  * @param  {array} arr
  * @throws Throws error if argument is not an array
- * @throws Throws error if argument is not 2d array of size 9x9
+ * @throws Throws error if argument is not 2d array of size NxN
  */
 function checkBoard(board) {
     if( board.constructor !== Array ) {
         throw 'Board is not an array!';
     }
 
-    if( board.length !== 9 ) {
-        throw 'Array must be 9x9!';
+    if( Math.sqrt(board.length) % 1 !== 0 ) {
+        throw 'Array size must be square number!';
     }
 
     for( let i = 0; i < board.length; i++ ) {
-        if( board[i].length !== 9 ) {
-            throw 'Array must be 9x9!';
+        if( board[i].length !== board.length ) {
+            throw 'Array must be NxN!';
         }
     }
 }
@@ -59,6 +59,14 @@ export default class Sudoku {
          *
          */
         this._sleep = 0;
+        /**
+         *
+         */
+        this._size = board.length;
+        /**
+         *
+         */
+        this._parts = Math.sqrt(board.length);
         /**
          *
          *
@@ -128,17 +136,17 @@ export default class Sudoku {
      *
      */
     _prepare() {
-        for( let i = 0; i < 9; i++ ) {
-            this._rowRule[i] = [ false, false, false, false, false, false, false, false, false ];
-            this._colRule[i] = [ false, false, false, false, false, false, false, false, false ];
-            this._squareRule[i] = [ false, false, false, false, false, false, false, false, false ];
-            this._sudoku[i] = [ null, null, null, null, null, null, null, null, null ];
+        for( let i = 0; i < this._size; i++ ) {
+            this._rowRule[i] = Array(this._size).fill(false);
+            this._colRule[i] = Array(this._size).fill(false);
+            this._squareRule[i] = Array(this._size).fill(false);
+            this._sudoku[i] = Array(this._size).fill(null);
         }
     }
 
     _analyze(input) {
-        for( let i = 0; i < 9; i++ ) {
-            for( let j = 0; j < 9; j++ ) {
+        for( let i = 0; i < this._size; i++ ) {
+            for( let j = 0; j < this._size; j++ ) {
                 if( !this._set(i, j, input[i][j]) ) {
                     throw 'Sudoku is not valid!';
                 }
@@ -157,7 +165,7 @@ export default class Sudoku {
             return true;
         }
 
-        for( let i = 1; i <= 9; i++ ) {
+        for( let i = 1; i <= this._size; i++ ) {
             if( this._set(this._emptyCells[index].row, this._emptyCells[index].col, i) ) {
                 if( this._backtrack(index + 1) ) {
                     return true;
@@ -176,7 +184,7 @@ export default class Sudoku {
 
         setTimeout(function() {
             this._onCellChange(this._emptyCells[step].row, this._emptyCells[step].col);
-            for( let i = 0 + this._sudoku[this._emptyCells[step].row][this._emptyCells[step].col] + 1; i <= 9; i++ ) {
+            for( let i = 0 + this._sudoku[this._emptyCells[step].row][this._emptyCells[step].col] + 1; i <= this._size; i++ ) {
                 if( this._set(this._emptyCells[step].row, this._emptyCells[step].col, i) ) {
                     this._onValueChange(this._emptyCells[step].row, this._emptyCells[step].col, i);
                     this._nonRecursiveBacktrack(step + 1);
@@ -223,7 +231,7 @@ export default class Sudoku {
         if( value !== null ) {
             this._rowRule[row][value - 1] = state;
             this._colRule[col][value - 1] = state;
-            this._squareRule[parseInt(row / 3) + (parseInt(col / 3) * 3)][value - 1] = state;
+            this._squareRule[parseInt(row / this._parts) + (parseInt(col / this._parts) * this._parts)][value - 1] = state;
         }
     }
 
@@ -236,6 +244,6 @@ export default class Sudoku {
      * @return {boolean}
      */
     _canSetValue(row, col, value) {
-        return !(this._rowRule[row][value - 1] || this._colRule[col][value - 1] || this._squareRule[parseInt(row / 3) + (parseInt(col / 3) * 3)][value - 1]);
+        return !(this._rowRule[row][value - 1] || this._colRule[col][value - 1] || this._squareRule[parseInt(row / this._parts) + (parseInt(col / this._parts) * this._parts)][value - 1]);
     }
 }

@@ -10,10 +10,14 @@ describe('test sudoku', function() {
         }).to.throw('Board is not an array!');
     });
 
-    it('constructor throws error if board argument is set and is not array 9x9', () => {
+    it('constructor throws error if board argument is set and is not array NxN', () => {
         expect(function() {
-            new Sudoku([]);
-        }).to.throw('Array must be 9x9!');
+            new Sudoku([
+                [ null, null, null, null ],
+                [ null, null, null, null ],
+                [ null, null, null, null ],
+            ]);
+        }).to.throw('Array size must be square number!');
     });
 
     it('constructor throws error if sudoku is not valid', () => {
@@ -109,7 +113,7 @@ describe('test sudoku', function() {
         }).to.throw('Argument onFinishListener must be function!');
     });
 
-    it('should solve with delay', function(done) {
+    it('should solve 9x9 with delay', function(done) {
         this.timeout(60000);
         const sudoku = new Sudoku([
             [ 1, 7, 2, 5, 4, 9, 6, 8, 3 ],
@@ -133,6 +137,25 @@ describe('test sudoku', function() {
                 [ 9, 6, 4, 7, 1, 5, 3, 2, 8 ],
                 [ 7, 3, 1, 6, 8, 2, 5, 9, 4 ],
                 [ 5, 2, 8, 9, 3, 4, 1, 6, 7 ],
+            ]);
+            done();
+        }, 1);
+    });
+
+    it('should solve 2x2 with delay', function(done) {
+        this.timeout(60000);
+        const sudoku = new Sudoku([
+            [ null, null, null, null ],
+            [ null, null, null, null ],
+            [ null, null, null, null ],
+            [ null, null, null, null ],
+        ]);
+        sudoku.solveWithDelay(function() {}, function() {}, function(result) {
+            expect(result).to.deep.equal([
+                [ 1, 2, 3, 4 ],
+                [ 3, 4, 1, 2 ],
+                [ 2, 1, 4, 3 ],
+                [ 4, 3, 2, 1 ],
             ]);
             done();
         }, 1);
